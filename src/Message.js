@@ -1,6 +1,15 @@
 function Message(props) {
+    let messageList = Array.from(props.MessageList)
     return(
-        <div>Привет {props.react}</div>
+        <div>
+            {messageList.map((item) => {
+                return (
+                    <div key={item.id}>
+                        {item.text}
+                    </div>
+                )
+            })}
+        </div>
     );
 }
 
