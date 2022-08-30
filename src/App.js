@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Message from './Message';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -11,6 +11,7 @@ const getId = (array) => {
 function App() {
   const [messageList, addMessage] = useState([]);
   const [textInput, SetTextInput] = useState('');
+  const inputTextRef = useRef(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -39,11 +40,14 @@ function App() {
     }
   }, [messageList]);
 
+  useEffect(()=>{
+    console.log(inputTextRef.current);
+  });
+
   const inputText = (event) => {
     event.preventDefault();
     SetTextInput(event.target.value)
   }
-
 
 
   return (
@@ -65,7 +69,7 @@ function App() {
           rowSpacing={2}
           alignItems="flex-end"
         >
-          <Grid xs={10}><TextField value={textInput} onChange={inputText} fullWidth id="outlined-basic" variant="outlined" placeholder="Введите текст" /></Grid>
+          <Grid xs={10}><TextField autoFocus ref={inputTextRef} value={textInput} onChange={inputText} fullWidth id="outlined-basic" variant="outlined" placeholder="Введите текст" /></Grid>
           <Grid xs={2}><Button size={"large"} variant="contained" fullWidth type="submit" disabled={!textInput}>Submit</Button></Grid>
         </Grid>
       </form>
