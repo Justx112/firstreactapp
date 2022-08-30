@@ -3,6 +3,8 @@ import Message from './Message';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Unstable_Grid2'
+import ListChats from './ListChats';
+
 
 const getId = (array) => {
   return array.length ? array[array.length - 1].id + 1 : 0
@@ -11,6 +13,20 @@ const getId = (array) => {
 function App() {
   const [messageList, addMessage] = useState([]);
   const [textInput, SetTextInput] = useState('');
+  const listChatsSource = [
+    {
+      id: 0,
+      name: "Стив джобс"
+    },
+    {
+      id: 0,
+      name: "Павел дуров"
+    },
+    {
+      id: 0,
+      name: "Билл Гейтс"
+    },
+  ]
   const inputTextRef = useRef(null);
 
   const handleSubmit = (event) => {
@@ -40,7 +56,7 @@ function App() {
     }
   }, [messageList]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(inputTextRef.current);
   });
 
@@ -53,26 +69,37 @@ function App() {
   return (
     <Grid
       container
-      direction="column"
-      columnSpacing={2}
-      justifyContent="flex-end"
+      direction="row"
+      columnSpacing={0}
+      xs={12}
       style={{
         height: '100%',
         overflow: 'none'
-      }}
-      wrap="nowrap">
-      <Message MessageList={messageList}/>
-      <form onSubmit={handleSubmit}>
-        <Grid
-          container
-          direction="row"
-          rowSpacing={2}
-          alignItems="flex-end"
-        >
-          <Grid xs={10}><TextField autoFocus ref={inputTextRef} value={textInput} onChange={inputText} fullWidth id="outlined-basic" variant="outlined" placeholder="Введите текст" /></Grid>
-          <Grid xs={2}><Button size={"large"} variant="contained" fullWidth type="submit" disabled={!textInput}>Submit</Button></Grid>
-        </Grid>
-      </form>
+      }}>
+      <ListChats ListChats={listChatsSource} xs={2}/>
+      <Grid
+        container
+        direction="column"
+        columnSpacing={2}
+        xs={10}
+        justifyContent="flex-end"
+        style={{
+          height: '100%',
+        }}
+        wrap="nowrap">
+        <Message MessageList={messageList} />
+        <form onSubmit={handleSubmit}>
+          <Grid
+            container
+            direction="row"
+            rowSpacing={2}
+            alignItems="flex-end"
+          >
+            <Grid xs={10}><TextField autoFocus ref={inputTextRef} value={textInput} onChange={inputText} fullWidth id="outlined-basic" variant="outlined" placeholder="Введите текст" /></Grid>
+            <Grid xs={2}><Button size={"large"} variant="contained" fullWidth type="submit" disabled={!textInput}>Submit</Button></Grid>
+          </Grid>
+        </form>
+      </Grid>
     </Grid>
   );
 }
