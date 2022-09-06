@@ -1,10 +1,15 @@
-import Message from "./Message";
+import { type } from "@testing-library/user-event/dist/type";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
-  const react = 'React';
-
+  const count = useSelector(state => state);
+  const dispatch = useDispatch();
   return (
-    <Message react={react}/>
+    <div style={{display:'flex'}}>
+      <button onClick={() => dispatch({type:'plus'})}>+</button>
+      <h1>{count}</h1>
+      <button onClick={() => dispatch({ type: 'minus' })}>-</button>
+    </div>
   );
 }
 
