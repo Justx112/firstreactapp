@@ -1,8 +1,10 @@
 import List from '@mui/material/List';
 import Grid from '@mui/material/Unstable_Grid2'
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
-function Message(props) {
-    let messageList = Array.from(props.MessageList)
+
+function Message() {
+    let {messages} = useSelector(state => state.filter(item => item.isActiveChat === true))[0]
     return (
         <Grid
             container
@@ -11,11 +13,11 @@ function Message(props) {
             wrap="nowrap"
             style={{overflow: 'auto'}}
         >
-            {messageList.map((item) => {
+            {messages.map((item) => {
                 return (
-                    <div key={item.id}>
+                    <div key={Math.random()}>
                         <Grid xs={3} >
-                            <List style={{ textAlign: 'center' }} elevation={2} > {item.text} </List>
+                            <List style={{ textAlign: 'center' }} elevation={2} > {item} </List>
                         </Grid>
                     </div>
                 )

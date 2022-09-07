@@ -3,16 +3,17 @@ import ChatPage from './pages/chats';
 import {useState} from 'react'
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import Profile from './pages/Profile';
+import MainPage from './pages/MainPage';
 
 
 function App() {
   return (
     <>
-      <Link to="/Chats">Chats</Link>
-      <Link to="/Profile">Profile</Link>
       <Routes>
+        <Route path='/' element={<MainPage/>} />
         <Route path='/Chats' element={<ChatPage />} />
-        <Route path='/Profile'/>
+        <Route path='/Profile' element = {<Profile/>}/>
         <Route path='/Chats/*' element={<ChatPage />} />
       </Routes>
     </>
