@@ -53,7 +53,7 @@ function ChatPage() {
                         alignItems="flex-end"
                     >
                         <Grid xs={10}><TextField autoFocus value={textInput} onChange={(e) => SetTextInput(e.target.value)} fullWidth id="outlined-basic" variant="outlined" placeholder="Введите текст" /></Grid>
-                        <Grid xs={2}><Button onClick={() => dispatch({ type: 'ADD_MESSAGE', payload: { id: activeId, message: textInput, } })} size={"large"} variant="contained" fullWidth type="submit" disabled={!textInput}>Submit</Button></Grid>
+                        <Grid xs={2}><Button onClick={() => dispatch({ type: 'ADD_MESSAGE', payload: { id: activeId, message: textInput, }, meta: { message: textInput } })} size={"large"} variant="contained" fullWidth type="submit" disabled={!textInput}>Submit</Button></Grid>
 
                     </Grid>
                 </form>

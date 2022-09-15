@@ -4,7 +4,9 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 
 function Message() {
-    let {messages} = useSelector(state => state.filter(item => item.isActiveChat === true))[0]
+    let activeChat = useSelector(state => state.filter(item => item.isActiveChat === true))[0]
+    let messages = activeChat ? activeChat.messages : false
+    if (messages)
     return (
         <Grid
             container
@@ -24,6 +26,10 @@ function Message() {
             })}
         </Grid>
     );
+    else
+    {
+        <h1>Сообщений пока нет</h1>        
+    }
 }
 
 export default Message

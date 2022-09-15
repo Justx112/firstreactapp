@@ -1,5 +1,11 @@
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { persistStore, persistReducer } from 'redux-persist/lib/storage'
+
+const persistConfig = {
+    key: 'root',
+    storage,
+}
 
 const getId = (array) => {
     return array.length ? array[array.length - 1].id + 1 : 0
@@ -27,6 +33,19 @@ const initianalValue = [
     },
 ];
 
+
+const timer = next => action =>{
+    
+    next(action)
+
+    const delay = setTimeout(() =>{
+        console.log(action?.meta?.message)
+    }, 3000)
+
+    return() => {
+        setTimeout(delay);
+    }
+}
 
 const reducer = (state = initianalValue, action) => {
     switch (action.type) {
@@ -83,4 +102,8 @@ const reducer = (state = initianalValue, action) => {
     }
 }
 
-export const store = createStore(reducer, composeWithDevTools());
+const presisReducer = persistReducer(persistConfig, reducer)
+
+export const store = createStore(presisReducer, applyMiddleware(timer));
+
+export const saveStore = (store)
