@@ -1,6 +1,7 @@
 import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { persistStore, persistReducer } from 'redux-persist/lib/storage'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 const persistConfig = {
     key: 'root',
@@ -34,7 +35,7 @@ const initianalValue = [
 ];
 
 
-const timer = next => action =>{
+const timer = store => next => action =>{
     
     next(action)
 
@@ -104,6 +105,6 @@ const reducer = (state = initianalValue, action) => {
 
 const presisReducer = persistReducer(persistConfig, reducer)
 
-export const store = createStore(presisReducer, applyMiddleware(timer));
+export const store = createStore(reducer, applyMiddleware(timer));
 
-export const saveStore = (store)
+export const saveStore = persistStore(store)
