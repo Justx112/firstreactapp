@@ -11,17 +11,8 @@ import { useSelector, useDispatch } from 'react-redux/es/exports';
 
 function ChatPage() {
     const [textInput, SetTextInput] = useState('');
-    const activeId = useSelector(state => state.filter(item => item.isActiveChat === true))[0]?.id
+    const activeId = useSelector(state => state.messanger.filter(item => item.isActiveChat === true))[0]?.id
     const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     if (messageList[messageList.length - 1]?.autor === "man") {
-    //         const delay = setInterval(() => {
-    //             dispatch({ type: 'ADD_MESSAGE', payload: { id: activeId, message: 'интересно' } })
-    //         }, 1500)
-    //         return () => clearInterval(delay)
-    //     }
-    // }, [messageList]);
 
     return (
         <Grid

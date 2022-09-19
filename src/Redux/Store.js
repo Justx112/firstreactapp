@@ -1,18 +1,13 @@
 import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-
-const persistConfig = {
-    key: 'root',
-    storage,
-}
+import thunk from "redux-thunk";
 
 const getId = (array) => {
     return array.length ? array[array.length - 1].id + 1 : 0
 }
 
-const initianalValue = [
+const initianalValue = {
+    messanger: [
     {
         id: 0,
         Name: 'Миша',
@@ -31,19 +26,22 @@ const initianalValue = [
         Name: 'Кеша',
         messages: [],
         isActiveChat: false,
-    },
-];
+    }],
+    users: [],
+    isLoading: false,
+    isError: false,
+};
 
 
-const timer = store => next => action =>{
-    
+const timer = store => next => action => {
+
     next(action)
 
-    const delay = setTimeout(() =>{
+    const delay = setTimeout(() => {
         console.log(action?.meta?.message)
     }, 3000)
 
-    return() => {
+    return () => {
         setTimeout(delay);
     }
 }
@@ -65,9 +63,9 @@ const reducer = (state = initianalValue, action) => {
                 return newObj;
             }
 
-            state = state.map(i => setActiveFunction(i))
+            let setActive = state.messanger.map(i => setActiveFunction(i))
 
-            return state
+            return { ...state, messanger: setActive }
 
         case 'ADD_MESSAGE':
             const AddMessage = (item) => {
@@ -83,28 +81,59 @@ const reducer = (state = initianalValue, action) => {
                 return newObj;
             }
 
-            state = state.map(i => AddMessage(i))
+            let newMessage = state.messanger.map(i => AddMessage(i))
 
-            return state
+            return { ...state, messanger: newMessage }
         case 'ADD_NEW_CHAT':
-            let newID = getId(state)
-            return [...state,
-            {
-                id: newID,
-                Name: action.payload,
-                messages: [],
-                isActiveChat: false,
+            let newID = getId(state.messanger)
+            return {...state,
+                messanger: [...state.messanger,
+                    {
+                        id: newID,
+                        Name: action.payload,
+                        messages: [],
+                        isActiveChat: false,
 
-            }]
+                    }]
+            }
         case 'DELETE_CHAT':
-            return state.filter(item => item.id !== action.payload)
+            return {...state,
+                messanger: state.messanger.filter(item => item.id !== action.payload),
+            }
+        case 'ADD_USERS':
+            return {
+                ...state,
+                users: action.payload
+            }
+        case 'IS_LOADING':
+            return{
+                ...state,
+                isLoading: action.payload
+            }
+        case 'SET_ERROR':
+            return{
+                ...state,
+                isError: action.payload
+            }
         default:
             return state
     }
 }
 
-const presisReducer = persistReducer(persistConfig, reducer)
 
-export const store = createStore(reducer, applyMiddleware(timer));
+export const getUsers = () => {
+    return async dispatch => {
+        dispatch({type: 'SET_ERROR', payload: false})
+        dispatch({ type: 'IS_LOADING', payload: true });
+        const response = await fetch('https://jsonplaceholder.typicode.com/users')
+        if (response.status!==200){
+            dispatch({ type: 'IS_LOADING', payload: false });
+            dispatch({ type: 'SET_ERROR', payload: true })
+        }
+        const data = await response.json();
+        dispatch({ type: 'ADD_USERS', payload: data });
+        dispatch({ type: 'IS_LOADING', payload: false });
+    }
+}
 
-export const saveStore = persistStore(store)
+export const store = createStore(reducer, composeWithDevTools(applyMiddleware(timer, thunk)));

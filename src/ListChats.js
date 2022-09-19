@@ -11,7 +11,7 @@ const getPath = (id) => {
 }
 
 function ListChats() {
-    const listChats = useSelector(state => state);
+    const listChats = useSelector(state => state.messanger.filter(item => item.Name));
     const dispatch = useDispatch();
     return (
         < List xs={2} >
